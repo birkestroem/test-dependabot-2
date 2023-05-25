@@ -1,0 +1,53 @@
+---
+name: "Dependabot notification on new PR"
+on: 
+  pull_request_target:
+    types: [opened, reopened]
+    branches:
+      - 'dependabot/**'
+env:
+  SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+  SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+jobs:
+  dependabot:
+    runs-on: ubuntu-latest
+    if: ${{ github.actor == 'dependabot[bot]' }}
+    steps:
+      - name: Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v1
+        with:
+          alert-lookup: true
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Send notification to Slack
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "I have created a pull-request to update the package *${{ steps.metadata.outputs.dependency-names }}* from _${{ steps.metadata.outputs.previous-version }}_ to _${{ steps.metadata.outputs.new-version }}_."
+                  }
+                },
+                {
+                  "type": "divider"
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "Open"
+                      },
+                      "url": "${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                    }
+                  ]
+                }
+              ]
+            }
