@@ -3,8 +3,8 @@ name: "Dependabot notification on new PR"
 on: 
   pull_request_target:
     types: [opened, reopened]
-    branches:
-      - 'dependabot/**'
+    # branches:
+    #   - 'dependabot/**'
 env:
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
   SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
