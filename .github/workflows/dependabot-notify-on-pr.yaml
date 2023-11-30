@@ -3,7 +3,7 @@ name: "Dependabot notification on new PR"
 on: 
   # Trigger the workflow on push or pull request,
   pull_request_target:
-    types: [opened, reopened]
+    types: [opened, reopened, synchronize, ready_for_review]
     # branches:
     #   - 'dependabot/**'
   # Allows you to run this workflow manually from the Actions tab
@@ -21,7 +21,7 @@ env:
 jobs:
   dependabot:
     runs-on: ubuntu-latest
-    if: ${{ github.actor == 'dependabot[bot]' }}
+    # if: ${{ github.actor == 'dependabot[bot]' }}
     steps:
       - name: Dependabot metadata
         id: metadata
