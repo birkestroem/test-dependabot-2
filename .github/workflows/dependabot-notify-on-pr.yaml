@@ -1,27 +1,17 @@
 ---
 name: "Dependabot notification on new PR"
 on: 
-  # Trigger the workflow on push or pull request,
   pull_request_target:
     types: [opened, reopened, synchronize, ready_for_review]
     # branches:
     #   - 'dependabot/**'
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-    inputs:
-      # This is the name of the person or thing that you want to greet
-      # The default value is 'World'
-      dependabot:
-        description: 'Dependabot'
-        required: true
-        default: 'dependabot[bot]'
 env:
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
   SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 jobs:
   dependabot:
     runs-on: ubuntu-latest
-    # if: ${{ github.actor == 'dependabot[bot]' }}
+    if: ${{ github.actor == 'dependabot[bot]' }}
     steps:
       - name: Dependabot metadata
         id: metadata
