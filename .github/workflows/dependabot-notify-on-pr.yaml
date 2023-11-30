@@ -20,34 +20,8 @@ jobs:
           alert-lookup: true
           github-token: "${{ secrets.GITHUB_TOKEN }}"
 
-      - name: Send notification to Slack
-        uses: slackapi/slack-github-action@v1.24.0
-        with:
-          payload: |
-            {
-              "blocks": [
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "I have created a pull-request to update the package *${{ steps.metadata.outputs.dependency-names }}* from _${{ steps.metadata.outputs.previous-version }}_ to _${{ steps.metadata.outputs.new-version }}_."
-                  }
-                },
-                {
-                  "type": "divider"
-                },
-                {
-                  "type": "actions",
-                  "elements": [
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "text": "Open"
-                      },
-                      "url": "${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
-                    }
-                  ]
-                }
-              ]
-            }
+      - name: Echo metadata
+        env:
+          CONTEXT: "${{ toJSON(steps.metadata) }}"
+          run: echo "$CONTEXT"
+  
