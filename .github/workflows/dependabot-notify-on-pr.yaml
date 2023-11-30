@@ -23,5 +23,5 @@ jobs:
       - name: Echo metadata
         env:
           CONTEXT: "${{ toJSON(steps.metadata) }}"
-          run: echo "$CONTEXT"
+        run: echo "$CONTEXT"
   
